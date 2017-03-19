@@ -1,22 +1,39 @@
-module.exports = {
-  entry: [
-    './src/index.js'
-  ],
+
+const webpack = require('webpack'); //to access built-in plugins
+const path = require('path');
+
+const ASSET_PATH = process.env.ASSET_PATH || '/';
+console.log(ASSET_PATH);
+
+const config = {
+  entry: './src/index.js',
   output: {
-    path: __dirname,
-    publicPath: '/',
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, '/'),
+    publicPath: ASSET_PATH,
   },
   module: {
-    loaders: [{
-      exclude: /node_modules/,
-      loader: 'babel'
-    }]
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      }
+    ]
   },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
-  },
+  plugins: [
+    // new webpack.optimize.UglifyJsPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH)
+    }),
+  ],
   devServer: {
     contentBase: './'
   }
 };
+
+module.exports = config;
