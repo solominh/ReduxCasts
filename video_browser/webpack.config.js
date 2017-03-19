@@ -9,7 +9,7 @@ const config = {
   entry: './src/index.js',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, '/'),
+    path: __dirname,
     publicPath: ASSET_PATH,
   },
   module: {
